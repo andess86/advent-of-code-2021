@@ -9,9 +9,7 @@ const input = fs.readFileSync("input.txt", "utf-8", (input, err) => {
 const commands = input.split("\n");
 let commandsArray = commands.map((command) => {
   let arr = [];
-  let t = command.split(" ");
-  let c = t[0];
-  let number = t[1];
+  let [c, number] = command.split(" ");
   arr.push(c, parseInt(number));
   return arr;
 });

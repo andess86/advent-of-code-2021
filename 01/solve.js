@@ -4,35 +4,37 @@ const input = fs.readFileSync("input.txt", "utf-8", (input, err) => {
     console.log(err);
   }
 });
-let nrOfLargerMeasurements = 0;
 const measurements = input.split("\n").map(Number);
-measurements.map((measurement, i) => {
-  if (measurement > measurements[i - 1]) {
-    nrOfLargerMeasurements++;
-  }
-});
-console.log(
-  "Number of measurements larger than previous one is " + nrOfLargerMeasurements
+
+const measurementComparator = (arr, slidingWindow = false) => {
+  console.log(slidingWindow);
+  let largerMeasurements = 0;
+  let newArr = [];
+  arr.map((el, i) => {
+    if (!slidingWindow) {
+      newArr.push(el);
+    } else {
+      if (arr[i + 1] && arr[i + 2]) {
+        newArr.push(el + arr[i + 1] + arr[i + 2]);
+      }
+    }
+  });
+  newArr.map((el, i) => {
+    if (el > newArr[i - 1]) {
+      largerMeasurements++;
+    }
+  });
+  return largerMeasurements;
+};
+
+const nrOfLargerMeasurements = measurementComparator(measurements);
+const sumOfSlidingWindow = measurementComparator(
+  measurements,
+  (slidingWindow = true)
 );
-
-let sumOfSlidingWindow = [];
-measurements.map((measurement, i) => {
-  if (measurements[i + 1] && measurements[i + 2]) {
-    sumOfSlidingWindow.push(
-      measurement + measurements[i + 1] + measurements[i + 2]
-    );
-  }
-});
-
-let nrOfLargerMeasurementsSlidingWindow = 0;
-
-sumOfSlidingWindow.map((measurement, i) => {
-  if (measurement > sumOfSlidingWindow[i - 1]) {
-    nrOfLargerMeasurementsSlidingWindow++;
-  }
-});
-
 console.log(
-  "Number of measurements within sliding window larger than previous one is " +
-    nrOfLargerMeasurementsSlidingWindow
+  `Number of measurements larger than previous one is  ${nrOfLargerMeasurements}`
+);
+console.log(
+  `Number of measurements within sliding window larger than previous one is ${sumOfSlidingWindow}`
 );
